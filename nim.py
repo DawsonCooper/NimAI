@@ -134,12 +134,14 @@ class NimAI():
         Q-value in `self.q`. If there are no available actions in
         `state`, return 0.
         """
-        possActions = set()
-        for item in self.q:
-            if item[0] == state:
-                possActions.add(item)
+        # get all actions
+        actions = []
+        for i in range(len(state)):
+            if state[i] != 0:
+                for j in range(1, state[i]+1):
+                    actions.append((i,j))
+
         
-        raise NotImplementedError
 
     def choose_action(self, state, epsilon=True):
         """
@@ -156,6 +158,39 @@ class NimAI():
         If multiple actions have the same Q-value, any of those
         options is an acceptable return value.
         """
+        actions = []
+        # get all actions 
+        for i in range(len(state)):
+            if state[i] != 0:
+                for j in range(1, state[i]+1):
+                    actions.append((i,j))
+
+        if epsilon:
+            if random.random() < self.epsilon:
+                return actions[random.randint(0, len(actions))]
+            else:
+                # return best action
+                pass
+        else:
+            # return best action
+            pass
+
+
+
+            
+
+                
+
+
+                
+
+
+
+
+                
+
+
+                
         raise NotImplementedError
 
 
