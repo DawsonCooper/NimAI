@@ -86,6 +86,20 @@ class NimAI():
         self.alpha = alpha
         self.epsilon = epsilon
 
+    def get_actions(self, state):
+        """
+        Given a current state this helper function will return a list of all possible actions (row, #to remove)  
+        If no actions we will return none
+        """
+        actions = []
+        # get all actions 
+        for i in range(len(state)):
+            if state[i] != 0:
+                for j in range(1, state[i]+1):
+                    actions.append((i,j))
+        if not actions:
+            return None
+        return actions 
     def update(self, old_state, action, new_state, reward):
         """
         Update Q-learning model, given an old state, an action taken
@@ -135,13 +149,19 @@ class NimAI():
         `state`, return 0.
         """
         # get all actions
-        actions = []
-        for i in range(len(state)):
-            if state[i] != 0:
-                for j in range(1, state[i]+1):
-                    actions.append((i,j))
-
+        actions = self.get_actions(state)
+        if actions == None:
+            return 0
+        # find best action
+        currBest = float('-inf')
+        for action in actions:
+            if (state,action) not in self.q:
+                self.q[(state,action)] = 0
+            if self.q[(state,action)] > currBest:
+                currBest = self.q[(state,action)]
         
+        return currBest
+         
 
     def choose_action(self, state, epsilon=True):
         """
@@ -158,12 +178,7 @@ class NimAI():
         If multiple actions have the same Q-value, any of those
         options is an acceptable return value.
         """
-        actions = []
-        # get all actions 
-        for i in range(len(state)):
-            if state[i] != 0:
-                for j in range(1, state[i]+1):
-                    actions.append((i,j))
+        actions = self.get_actions(state)
 
         if epsilon:
             if random.random() < self.epsilon:
@@ -174,21 +189,6 @@ class NimAI():
         else:
             # return best action
             pass
-
-
-
-            
-
-                
-
-
-                
-
-
-
-
-                
-
 
                 
         raise NotImplementedError
