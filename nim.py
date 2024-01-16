@@ -179,7 +179,8 @@ class NimAI():
         options is an acceptable return value.
         """
         actions = self.get_actions(state)
-
+        actions2 = Nim.available_actions(state)
+        print(actions, actions2)
         if epsilon:
             if random.random() < self.epsilon:
                 return actions[random.randint(0, len(actions))]
