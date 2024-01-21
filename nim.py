@@ -86,20 +86,7 @@ class NimAI():
         self.alpha = alpha
         self.epsilon = epsilon
 
-    def get_actions(self, state):
-        """
-        Given a current state this helper function will return a list of all possible actions (row, #to remove)  
-        If no actions we will return none
-        """
-        actions = []
-        # get all actions 
-        for i in range(len(state)):
-            if state[i] != 0:
-                for j in range(1, state[i]+1):
-                    actions.append((i,j))
-        if not actions:
-            return None
-        return actions 
+
     def update(self, old_state, action, new_state, reward):
         """
         Update Q-learning model, given an old state, an action taken
@@ -149,7 +136,7 @@ class NimAI():
         `state`, return 0.
         """
         # get all actions
-        actions = self.get_actions(state)
+        actions = Nim.available_actions(state)
         if actions == None:
             return 0
         # find best action
@@ -178,9 +165,8 @@ class NimAI():
         If multiple actions have the same Q-value, any of those
         options is an acceptable return value.
         """
-        actions = self.get_actions(state)
-        actions2 = Nim.available_actions(state)
-        print(actions, actions2)
+        actions = Nim.available_actions(state)
+        print({"first": len(actions)})
         if epsilon:
             if random.random() < self.epsilon:
                 return actions[random.randint(0, len(actions))]
