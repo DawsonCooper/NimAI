@@ -136,7 +136,8 @@ class NimAI():
         `state`, return 0.
         """
         # get all actions
-        actions = Nim.available_actions(state)
+        actions = list(Nim.available_actions(state))
+
         if actions == None:
             return 0
         # find best action
@@ -165,20 +166,14 @@ class NimAI():
         If multiple actions have the same Q-value, any of those
         options is an acceptable return value.
         """
-        actions = Nim.available_actions(state)
+        actions = list(Nim.available_actions(state))
         print({"first": len(actions)})
         if epsilon:
             if random.random() < self.epsilon:
                 return actions[random.randint(0, len(actions))]
-            else:
-                # return best action
-                pass
         else:
-            # return best action
-            pass
-
+            return max(actions, key=lambda key:self.q[key])
                 
-        raise NotImplementedError
 
 
 def train(n):
