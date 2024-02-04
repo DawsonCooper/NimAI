@@ -102,6 +102,7 @@ class NimAI():
         Return the Q-value for the state `state` and the action `action`.
         If no Q-value exists yet in `self.q`, return 0.
         """
+        print({'get_q values': self.q})
         if (state, action) in self.q:
             return self.q[(state, action)]
         else:
@@ -152,6 +153,7 @@ class NimAI():
          
 
     def choose_action(self, state, epsilon=True):
+        # returning nonetype at some point
         """
         Given a state `state`, return an action `(i, j)` to take.
 
@@ -166,13 +168,20 @@ class NimAI():
         If multiple actions have the same Q-value, any of those
         options is an acceptable return value.
         """
+        # we are not taking into account there being no current q values
         actions = list(Nim.available_actions(state))
-        print({"first": len(actions)})
+        print({"actions": actions})
+        for val in self.q:
+            print(val)
+        if len(self.q) == 0:
+            print({'random choice': actions[random.randrange(len(actions))]})
+            return actions[random.randrange(len(actions))]
         if epsilon:
             if random.random() < self.epsilon:
+                print(actions[random.randint(0, len(actions))])
                 return actions[random.randint(0, len(actions))]
-        else:
-            return max(actions, key=lambda key:self.q[key])
+        print(max(actions, key=lambda key:self.q[key]))
+        return max(actions, key=lambda key:self.q[key])
                 
 
 
