@@ -102,11 +102,16 @@ class NimAI():
         Return the Q-value for the state `state` and the action `action`.
         If no Q-value exists yet in `self.q`, return 0.
         """
-        print({'get_q values': self.q})
-        if (state, action) in self.q:
-            return self.q[(state, action)]
+        # State is a list representing how many columns there are in each row [1,3,5,7]
+        # action is (row, how many we want to remove) (3,5)
+
+        state = tuple(state)
+        if action not in self.q:
+            self.q[(state,action)] = 0
+            return 0 
         else:
-            return 0
+            return self.q[(state, action)]
+
 
     def update_q_value(self, state, action, old_q, reward, future_rewards):
         """
@@ -124,6 +129,7 @@ class NimAI():
         is the sum of the current reward and estimated future rewards.
         """
         # Q(s, a) <- old value estimate + alpha * (new value estimate - old value estimate)
+        state = tuple(state)
         self.q[(state,action)] = old_q + self.alpha * (reward + future_rewards - old_q)
 
     def best_future_reward(self, state):
@@ -137,6 +143,7 @@ class NimAI():
         `state`, return 0.
         """
         # get all actions
+        state = tuple(state)
         actions = list(Nim.available_actions(state))
 
         if actions == None:
@@ -169,6 +176,7 @@ class NimAI():
         options is an acceptable return value.
         """
         # we are not taking into account there being no current q values
+        state = tuple(state)
         actions = list(Nim.available_actions(state))
         print({"actions": actions})
         for val in self.q:
@@ -180,6 +188,7 @@ class NimAI():
             if random.random() < self.epsilon:
                 print(actions[random.randint(0, len(actions))])
                 return actions[random.randint(0, len(actions))]
+            
         print(max(actions, key=lambda key:self.q[key]))
         return max(actions, key=lambda key:self.q[key])
                 
